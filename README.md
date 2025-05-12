@@ -6,6 +6,8 @@
   - [Introduction](#introduction)
   - [Prerequisites](#prerequisites)
   - [Step 1: Install Linux Host VM](#step-1-install-linux-host-vm)
+    - [VM INstall Using OrbStack (ARM Optimized)](#vm-install-using-orbstack-arm-optimized)
+    - [Benefits vs Traditional VMs:](#benefits-vs-traditional-vms)
   - [Step 2: Install ContainerLab on Host VM](#step-2-install-containerlab-on-host-vm)
   - [Step 3: Install Arista AVD on Host VM](#step-3-install-arista-avd-on-host-vm)
   - [Step 4: Import Arista cEOS-Lab Image Into Docker](#step-4-import-arista-ceos-lab-image-into-docker)
@@ -33,6 +35,26 @@ This guide provides step-by-step instructions for setting up an Arista Validated
 - [ ] Basic Linux command line knowledge
 
 ## Step 1: Install Linux Host VM
+
+### VM INstall Using OrbStack (ARM Optimized)
+
+For faster performance on Apple Silicon (M1/M2/M3) Macs:
+
+1. Install [OrbStack](https://orbstack.dev/download) (Docker + lightweight Linux VMs in one tool)
+   I like to use [Homebrew](https://brew.sh/) to manage the packages installed on my macbook.
+
+```bash
+brew install orbstack
+```
+
+2.  Create a new image by hitting the '+' and fille out the following in the New Machine Menu
+![OrbStack New Machine Menu](images/orbstack_newmachine_menu.png)
+
+### Benefits vs Traditional VMs:
+- 3x faster startup times
+- Native ARM architecture support
+- Seamless file sharing between Mac/VM
+- Lower CPU/memory overhead
 
 ## Step 2: Install ContainerLab on Host VM
 
