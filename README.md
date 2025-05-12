@@ -9,6 +9,7 @@
     - [VM INstall Using OrbStack (ARM Optimized)](#vm-install-using-orbstack-arm-optimized)
     - [Benefits vs Traditional VMs:](#benefits-vs-traditional-vms)
   - [Step 2: Install ContainerLab on Host VM](#step-2-install-containerlab-on-host-vm)
+    - [Attach to OrbStack via VSCode IDE](#attach-to-orbstack-via-vscode-ide)
   - [Step 3: Install Arista AVD on Host VM](#step-3-install-arista-avd-on-host-vm)
   - [Step 4: Import Arista cEOS-Lab Image Into Docker](#step-4-import-arista-ceos-lab-image-into-docker)
   - [Step 5: Copy AVD Examples to Working Directory](#step-5-copy-avd-examples-to-working-directory)
@@ -57,6 +58,16 @@ brew install orbstack
 - Lower CPU/memory overhead
 
 ## Step 2: Install ContainerLab on Host VM
+
+### Attach to OrbStack via VSCode IDE
+
+Orbstack has a really cool integration for VSCode. When using the Remote Explorer extension for VSC we can attach directly to our new VM.
+
+1. Install VSC Code extension Remote Explorer (If you don't already have it)
+
+![VSC Remote Explorer](images/vsc_extension_remoteExplorer.png)
+
+2. 
 
 ## Step 3: Install Arista AVD on Host VM
 
