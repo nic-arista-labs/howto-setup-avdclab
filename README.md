@@ -1,4 +1,4 @@
-# howto-setup-avdclab
+# How-To Setup Arista AVD with Containerlabs
 
 ## Table of Contents
 1. [Introduction](#introduction)
@@ -14,3 +14,12 @@
 11. [Step 9: Run AVD Build and Deploy](#step-9-build-run-deploy)
 12. [Troubleshooting](#tshooting)
 13. [Additional Resources](#add-resource)
+
+### Introduction
+
+This guide provides step-by-step instructions for setting up an Arista Validated Design (AVD) lab environment using ContainerLab with cEOS-Lab containers. The environment will allow you to:
+- Simulate Arista network topologies
+- Generate configuration templates
+- Test network automation workflows
+- Validate designs before production deployment
+
