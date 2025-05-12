@@ -25,6 +25,7 @@ This guide provides step-by-step instructions for setting up an Arista Validated
 - Validate designs before production deployment
 
 ## Prerequisites
+
 - [ ] VMware Workstation/Fusion or VirtualBox
 - [ ] 8GB+ RAM allocated to host VM
 - [ ] Ubuntu 20.04/22.04/24.04 LTS ISO
