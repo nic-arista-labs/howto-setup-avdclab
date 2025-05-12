@@ -93,6 +93,13 @@ Orbstack has a really cool integration for VSCode. When using the Remote Explore
 
 ### Install Containerlabs "All Componets" Scrript Using VSC
 
+1. Open a new terminal Terminal > New Terminal
+
+2. Run the install script from Containerlabs which will deploy all the required componets including docker
+
+```bash
+curl -sL https://containerlab.dev/setup | sudo -E bash -s "all"
+```
 
 
 ## Step 3: Install Arista AVD on Host VM
