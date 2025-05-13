@@ -1,0 +1,93 @@
+name: AVD_expl_campus
+mgmt:
+  network: clabmgmt
+  bridge: clabmgmt
+  ipv4-subnet: 192.168.101.0/24
+topology:
+  kinds:
+    ceos:
+      env:
+        CLAB_MGMT_VRF: MGMT
+      extras:
+        ceos-copy-to-flash:
+          - ./cvp_extensions/TerminAttr64-1.36.1-1.swix
+          - ./startup_config/startup-config
+  nodes:
+    # Spine nodes
+    SPINE1:
+      kind: ceos
+      image: ceosarm:4.34.1F
+      mgmt-ipv4: 192.168.101.13
+    SPINE2:
+      kind: ceos
+      image: ceosarm:4.34.1F
+      mgmt-ipv4: 192.168.101.14
+    # IDF-1
+    LEAF1A:
+      kind: ceos
+      image: ceosarm:4.34.1F
+      mgmt-ipv4: 192.168.101.111
+    LEAF1B:
+      kind: ceos
+      image: ceosarm:4.34.1F
+      mgmt-ipv4: 192.168.101.112
+    # IDF-2
+    LEAF2A:
+      kind: ceos
+      image: ceosarm:4.34.1F
+      mgmt-ipv4: 192.168.101.113
+    # IDF-3
+    LEAF3A:
+      kind: ceos
+      image: ceosarm:4.34.1F
+      mgmt-ipv4: 192.168.101.114
+    LEAF3B:
+      kind: ceos
+      image: ceosarm:4.34.1F
+      mgmt-ipv4: 192.168.101.115
+    LEAF3C:
+      kind: ceos
+      image: ceosarm:4.34.1F
+      mgmt-ipv4: 192.168.101.116
+    LEAF3D:
+      kind: ceos
+      image: ceosarm:4.34.1F
+      mgmt-ipv4: 192.168.101.117
+    LEAF3E:
+      kind: ceos
+      image: ceosarm:4.34.1F
+      mgmt-ipv4: 192.168.101.118
+#Container switch links
+  links:
+    # Spine to Spine
+    - endpoints: ["SPINE1:eth1", "SPINE2:eth1"]
+    - endpoints: ["SPINE1:eth2", "SPINE2:eth2"]
+    # Spine to IDF-1
+    - endpoints: ["SPINE1:eth3", "LEAF1A:eth1"]
+    - endpoints: ["SPINE2:eth3", "LEAF1B:eth1"]
+    # Spine to IDF-2
+    - endpoints: ["SPINE1:eth4", "LEAF2A:eth1"]
+    - endpoints: ["SPINE2:eth4", "LEAF2A:eth2"]
+    # Spine to IDF-3
+    - endpoints: ["SPINE1:eth5", "LEAF3A:eth1"]
+    - endpoints: ["SPINE2:eth5", "LEAF3A:eth2"]
+    - endpoints: ["SPINE1:eth6", "LEAF3B:eth1"]
+    - endpoints: ["SPINE2:eth6", "LEAF3B:eth2"]
+    # Leaf1a to Leaf1b
+    - endpoints: ["LEAF1A:eth2", "LEAF1B:eth2"]
+    - endpoints: ["LEAF1A:eth3", "LEAF1B:eth3"]
+    # Leaf3a to Leaf3b
+    - endpoints: ["LEAF3A:eth3", "LEAF3B:eth3"]
+    - endpoints: ["LEAF3A:eth4", "LEAF3B:eth4"]
+    # Leafc
+    - endpoints: ["LEAF3C:eth1", "LEAF3A:eth5"]
+    - endpoints: ["LEAF3C:eth2", "LEAF3B:eth5"]
+    # Leafd
+    - endpoints: ["LEAF3D:eth1", "LEAF3A:eth6"]
+    - endpoints: ["LEAF3D:eth2", "LEAF3B:eth6"]
+    # Leafe
+    - endpoints: ["LEAF3E:eth1", "LEAF3A:eth7"]
+    - endpoints: ["LEAF3E:eth2", "LEAF3B:eth7"]
+
+
+

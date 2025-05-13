@@ -1,0 +1,40 @@
+!
+no aaa root
+!
+vrf instance MGMT
+!
+username admin privilege 15 role network-admin secret sha512 $6$jhJvRcd2ct/9LgGk$hgC3vm2ft4Ey8rETSD1EUOp7G31f/BWwVB13hMtp/x3w1w.sNpr5/3EPZIWuKXDeAhuj09wD6VRkEaPLGSpnW0
+!
+management api http-commands
+   no shutdown
+!
+no service interface inactive port-id allocation disabled
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model multi-agent
+!
+ip name-server vrf MGMT 8.8.8.8
+!
+spanning-tree mode mstp
+!
+system l1
+   unsupported speed action error
+   unsupported error-correction action error
+!
+management api gnmi
+   transport grpc default
+!
+management api netconf
+   transport ssh default
+!
+interface Management0
+   vrf MGMT
+!
+no ip routing
+ip routing vrf MGMT
+!
+ip route vrf MGMT 0.0.0.0/0 192.168.101.1
+!
+!
+end
