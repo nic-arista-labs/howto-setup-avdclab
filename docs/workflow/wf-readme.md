@@ -13,8 +13,6 @@ This document outlines the workflow for using Arista Ansible Validated Designs (
 
 ### Inventory Structure
 
-# Create this folder structure
-
 Below is a simple basic Ansible file structure breakdown.
 
 ```bash
@@ -30,3 +28,30 @@ project_rooot/
 ├── deploy.yml                 # playbook to push configuration to CVaaS/CVP
 
 ```
+Here is an example of the Ansible inventory file that can use used to define your AVD topology.
+
+```yaml
+
+### inventory.yml
+
+This YAML file defines the topology (fabric) and host relationships.
+
+```yaml
+all:
+  children:
+    FABRIC:
+      children:
+        DC1_SPINES:
+          hosts:
+            spine1:
+            spine2:
+        DC1_LEAFS:
+          hosts:
+            leaf1:
+            leaf2:
+
+```
+
+### Role of group_vars and host_vars
+
+### Build Playbook
