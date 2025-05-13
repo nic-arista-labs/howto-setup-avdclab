@@ -134,4 +134,26 @@ l2leaf:
           uplink_switch_interfaces: [Ethernet1]
 ```
 
+<span style="background-color:rgb(180, 180, 180);padding: 0.2em 0.4em;font-weight: bold">group_vars/SPINES.yml: & LEAFS.yml</span> Global AVD Configuration variables which specify or designate the type of category the switch host belong to. The yaml file destigantes the switch host to be either a spine or a leaf deisgn on the topology.
+
+You should notice the type designation align with the parameters outlined in the FABRIC.yml variables file
+
+<script> function showTab(tabId) { document.getElementById('tab1').style.display = 'none'; document.getElementById('tab2').style.display = 'none'; document.getElementById(tabId).style.display = 'block'; }
+</script>
+<div style="display: flex; margin-bottom: 10px;">
+  <button onclick="showTab('tab1')" style="padding: 8px 16px; cursor: pointer;">Config A</button>
+  <button onclick="showTab('tab2')" style="padding: 8px 16px; cursor: pointer;">Config B</button>
+</div>
+<div id="tab1" style="display: block;">
+  ```yaml
+  type: l3spine     # Must be either spine|l3spine
+  ```
+</div>
+<div id="tab2" style="display: none;">
+  ```yaml
+  type: l2leaf     # Must be l2leaf
+  ```
+</div>
+
+
 ### Build Playbook
