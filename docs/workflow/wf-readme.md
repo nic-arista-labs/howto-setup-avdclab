@@ -38,14 +38,14 @@ all:
   children:
     FABRIC:
       children:
-        DC1_SPINES:
+        SPINES:
           hosts:
             spine1:
             spine2:
-        DC1_LEAFS:
+        LEAFS:
           hosts:
-            leaf1:
-            leaf2:
+            leaf1a:
+            leaf2b:
 ```
 
 ### Role of group_vars and host_vars
@@ -98,10 +98,10 @@ l3spine:
   node_groups:
     - group: SPINES
       nodes:
-        - name: SPINE1
+        - name: spine1
           id: 1
           mgmt_ip: "192.168.101.13/24"
-        - name: SPINE2
+        - name: spine2
           id: 2
           mgmt_ip: "192.168.101.14/24"
 
@@ -122,38 +122,37 @@ l2leaf:
       filter:
         tags: [ "110", "120", "130" ]
       nodes:
-        - name: LEAF1A
+        - name: leaf1a
           id: 3
           mgmt_ip: "192.168.101.111/24"
           uplink_switches: [SPINE1]
           uplink_switch_interfaces: [Ethernet1]
-        - name: LEAF1B
+        - name: leaf1b
           id: 4
           mgmt_ip: "192.168.101.112/24"
           uplink_switches: [SPINE2]
           uplink_switch_interfaces: [Ethernet1]
 ```
 
-<span style="background-color:rgb(180, 180, 180);padding: 0.2em 0.4em;font-weight: bold">group_vars/SPINES.yml: & LEAFS.yml</span> Global AVD Configuration variables which specify or designate the type of category the switch host belong to. The yaml file destigantes the switch host to be either a spine or a leaf deisgn on the topology.
+<span style="background-color:rgb(180, 180, 180);padding: 0.2em 0.4em;font-weight: bold">group_vars/SPINES.yml: & LEAFS.yml</span> Global AVD Configuration variables which specify or designate the type of category the switch hosts belong to. The yaml file destigantes the switch host to be either a spine or a leaf in the topology.
 
-You should notice the type designation align with the parameters outlined in the FABRIC.yml variables file
+You should notice the type designation aligns with the parameters outlined in the FABRIC.yml variables file
 
-<script> function showTab(tabId) { document.getElementById('tab1').style.display = 'none'; document.getElementById('tab2').style.display = 'none'; document.getElementById(tabId).style.display = 'block'; }
-</script>
-<div style="display: flex; margin-bottom: 10px;">
-  <button onclick="showTab('tab1')" style="padding: 8px 16px; cursor: pointer;">Config A</button>
-  <button onclick="showTab('tab2')" style="padding: 8px 16px; cursor: pointer;">Config B</button>
-</div>
-<div id="tab1" style="display: block;">
-  ```yaml
-  type: l3spine     # Must be either spine|l3spine
-  ```
-</div>
-<div id="tab2" style="display: none;">
-  ```yaml
-  type: l2leaf     # Must be l2leaf
-  ```
-</div>
+
+```yaml
+---
+### group_vars/DC1_SPINES.yml
+
+type: l3spine     # Must be either spine|l3spine
+```
+
+```yaml
+---
+### group_vars/DC1_LEAFS.yml
+
+type: l2leaf     # Must be l2leaf
+```
+
 
 
 ### Build Playbook
