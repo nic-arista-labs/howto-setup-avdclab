@@ -101,6 +101,9 @@ Orbstack has a really cool integration for VSCode. When using the Remote Explore
 curl -sL https://containerlab.dev/setup | sudo -E bash -s "all"
 ```
 
+3. My preference to help manage Docker images and container is to use the VSC extension for Docker. We will install on the docker extension for VSC.
+
+![VSC Docker Extension Install](images/vsc_extension_dockerInstall.png)
 
 ## Step 3: Install Arista AVD on Host VM
 
