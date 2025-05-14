@@ -3,7 +3,7 @@
 ## Table of Contents
 - [AVD Workflow Overview](workflow-overview)
 - [Inventory Structure](#inventory-structure)
-- [Role of group_vars and host_vars](#roles-of-vars)
+- [Role of Variables](#role-of-variables)
 - [Build Playbook](#build-playbook)
 
 ### AVD Workflow Overview
@@ -46,9 +46,17 @@ all:
           hosts:
             leaf1a:
             leaf2b:
+    NETWORK_SERVIVES:
+      children:
+        LEAFS:
+        SPINES:
+    NETWORK_PORTS:
+      children:
+        LEAFS:
+        SPINES:
 ```
 
-### Role of group_vars and host_vars
+### Role of Variables
 
 <span style="background-color:rgb(180, 180, 180);padding: 0.2em 0.4em;font-weight: bold">group_vars/all.yml:</span> Global AVD variables shared by all devices.
 This is a great place to store the required Arista eAPI and SSH connection parameters. Ansible can reference these parameters for all devices in the inventory file.
