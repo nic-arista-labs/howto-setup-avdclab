@@ -364,3 +364,23 @@ The <strong>deploy.yml</strong> playbook pushes the rendered EOS configurations 
 4. Assigns configlets to the appropriate devices.
 5. Optionally, initiates config proposals for user approval (Studio mode).
 6. Verifies assignment and returns status.
+
+#### CVaaS/CVP Authentication: Token Requirement
+To authenticate with CVaaS securely:
+
+Use a Service Account
+- A CloudVision service account must be created in the CVaaS <strong>Settings > Users > Service Accounts section.</strong>
+- Generate an API access token for this account.
+- Store this token as an environment variable or Ansible Vault.
+
+```bash
+export CVP_PASSWORD="your_cvaas_service_account_token"
+```
+
+Using an environment variable is an easy and secure way to pass the token into the playbook via:
+
+```yaml
+cv_token: "{{ lookup('env', 'CVP_PASSWORD') }}"
+```
+
+<strong>Important:</strong> The service account should have sufficient permissions (typically read/write access to Config Studio, Devices, and Provisioning APIs).
