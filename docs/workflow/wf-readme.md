@@ -336,6 +336,55 @@ The global variables are in place and ready for the next steps
 - <span style="background-color:rgb(207, 207, 207);padding: 0.2em 0.4em;font-weight: bold">eos_designs</span> = "What should this network do?"
 - <span style="background-color:rgb(207, 207, 207);padding: 0.2em 0.4em;font-weight: bold">eos_cli_config_gen</span> = "What CLI do I need to make that happen?"
 
+#### Example Output
+
+```bash
+(venv) root@057f4a3b7a6a:/app/examples/campus-fabric# ansible-playbook -i inventory.yml build.yml 
+
+PLAY [Build Configs] **************************************************************************************************************************************************************************************
+
+TASK [arista.avd.eos_designs : Verify Requirements] *******************************************************************************************************************************************************
+AVD version 5.1.0
+Use -v for details.
+ok: [SPINE1 -> localhost]
+
+TASK [arista.avd.eos_designs : Create required output directories if not present] *************************************************************************************************************************
+ok: [SPINE1 -> localhost] => (item=/app/examples/campus-fabric/intended/structured_configs)
+ok: [SPINE1 -> localhost] => (item=/app/examples/campus-fabric/documentation/fabric)
+
+TASK [arista.avd.eos_designs : Set eos_designs facts] *****************************************************************************************************************************************************
+ok: [SPINE1]
+
+TASK [arista.avd.eos_designs : Generate device configuration in structured format] ************************************************************************************************************************
+ok: [SPINE1 -> localhost]
+ok: [SPINE2 -> localhost]
+ok: [LEAF1A -> localhost]
+ok: [LEAF1B -> localhost]
+
+TASK [arista.avd.eos_designs : Generate fabric documentation] *********************************************************************************************************************************************
+ok: [SPINE1 -> localhost]
+
+TASK [arista.avd.eos_designs : Remove avd_switch_facts] ***************************************************************************************************************************************************
+ok: [SPINE1]
+
+TASK [arista.avd.eos_cli_config_gen : Verify Requirements] ************************************************************************************************************************************************
+skipping: [SPINE1]
+
+TASK [arista.avd.eos_cli_config_gen : Generate eos intended configuration and device documentation] *******************************************************************************************************
+ok: [SPINE1 -> localhost]
+ok: [SPINE2 -> localhost]
+ok: [LEAF1A -> localhost]
+ok: [LEAF1B -> localhost]
+
+
+PLAY RECAP ************************************************************************************************************************************************************************************************
+LEAF1A                     : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+LEAF1B                     : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0      
+SPINE1                     : ok=7    changed=0    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
+SPINE2                     : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+```
+
+
 ### Deploy Playbook
 
 ```yaml
