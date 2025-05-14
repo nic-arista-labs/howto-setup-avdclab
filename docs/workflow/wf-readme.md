@@ -5,6 +5,7 @@
 - [Inventory Structure](#inventory-structure)
 - [Role of Variables](#role-of-variables)
 - [Build Playbook](#build-playbook)
+- [Deploy Playbook](#deploy-playbook)
 
 ### AVD Workflow Overview
 
@@ -334,3 +335,32 @@ The global variables are in place and ready for the next steps
 💡 <strong>Think of it this way:</strong>
 - <span style="background-color:rgb(207, 207, 207);padding: 0.2em 0.4em;font-weight: bold">eos_designs</span> = "What should this network do?"
 - <span style="background-color:rgb(207, 207, 207);padding: 0.2em 0.4em;font-weight: bold">eos_cli_config_gen</span> = "What CLI do I need to make that happen?"
+
+### Deploy Playbook
+
+```yaml
+---
+- name: Deploy Configurations to Devices Using CloudVision Portal
+  hosts: DC1_FABRIC
+  gather_facts: false
+  connection: local
+  tasks:
+    - name: Push Configuration to CVaaS Studio
+      ansible.builtin.import_role:
+        name: arista.avd.cv_deploy
+      vars:
+        cv_server: www.cv-prod-us-central1-c.arista.io
+        cv_token: "{{ lookup('env', 'CVP_PASSWORD') }}"
+
+```
+
+#### What This Playbook Does
+The <strong>deploy.yml</strong> playbook pushes the rendered EOS configurations to CloudVision as-a-Service (CVaaS) using the arista.avd.cv_deploy role. Specifically:
+
+<span style="background-color:rgb(207, 207, 207);padding: 0.2em 0.4em;font-weight: bold">cv_deploy Role Workflow:</span>
+1. Reads intended configs from the intended_configs/ directory.
+2. Connects to CVaaS using the cv_server and cv_token.
+3. Creates or updates configlets in CloudVision Studio.
+4. Assigns configlets to the appropriate devices.
+5. Optionally, initiates config proposals for user approval (Studio mode).
+6. Verifies assignment and returns status.
