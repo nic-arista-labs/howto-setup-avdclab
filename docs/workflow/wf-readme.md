@@ -276,20 +276,50 @@ The global variables are in place and ready for the next steps
 
 ### Build Playbook
 
-1. arista.avd.eos_designs
-  🔹 <strong>Purpose:</strong> Generates structured configuration data models from your inventory (inventory.yml, group_vars, and host_vars). It also builds fabric-wide documentation.
+```yaml
+---
+# build.yml
+
+- name: Build Configs
+  hosts: FABRIC
+  gather_facts: false
+  tasks:
+
+    - name: Generate AVD Structured Configurations and Fabric Documentation
+      ansible.builtin.import_role:
+        name: arista.avd.eos_designs
+
+    - name: Generate Device Configurations and Documentation
+      ansible.builtin.import_role:
+        name: arista.avd.eos_cli_config_gen
+```
+
+1. <span style="background-color:rgb(207, 207, 207);padding: 0.2em 0.4em;font-weight: bold">arista.avd.eos_designs</span>
   
-    📤 <strong>Outputs:</strong>
+    <strong>Purpose:</strong> Generates structured configuration data models from your inventory (inventory.yml, group_vars, and host_vars). It also builds fabric-wide documentation.
+    
+    <strong>Outputs:</strong>
+    - YAML data structures per device under structured_configs/
+    - Markdown-based documentation in fabric/documentation/
 
-      - YAML data structures per device under structured_configs/
-      - Markdown-based documentation in fabric/documentation/
+    <strong>What it includes:</strong>
+   - Interface assignments
+   - BGP/EVPN settings 
+   - VLANs/SVI definitions
+   - Underlay/Overlay routing logic
+<br>
+2. <span style="background-color:rgb(207, 207, 207);padding: 0.2em 0.4em;font-weight: bold">arista.avd.eos_cli_config_gen</span>
+  
+    <strong>Purpose:</strong> Takes the structured config output from eos_designs and renders CLI-ready EOS configurations using Jinja2 templates.
+    
+    <strong>Outputs:</strong>
+    - Flat text configuration files per device in intended_configs/
+    - Optionally, generated_configlets/ for CVP Studio
 
-📚 <strong>What it includes:</strong>
-
-- Interface assignments
-- BGP/EVPN settings 
-- VLANs/SVI definitions
-- Underlay/Overlay routing logic
+    <strong>What it includes:</strong>
+   - Complete running-config per device
+   - Platform-specific syntax (MLAG, port-channel, BGP, etc.)
+   - Ready to push to EOS or CVaaS
 
 #### How They Work Together
 1. <span style="background-color:rgb(207, 207, 207);padding: 0.2em 0.4em;font-weight: bold">eos_designs:</span>
