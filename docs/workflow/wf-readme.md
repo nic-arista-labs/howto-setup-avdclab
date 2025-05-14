@@ -128,7 +128,7 @@ l2leaf:
       uplink_interfaces: [Ethernet51]
       mlag_interfaces: [Ethernet53, Ethernet54]
       filter:
-        tags: [ "110", "120", "130" ]
+        tags: [ "110", "120" ]
       nodes:
         - name: leaf1a
           id: 3
@@ -149,18 +149,55 @@ You should notice the type designation aligns with the parameters outlined in th
 
 ```yaml
 ---
-### group_vars/DC1_SPINES.yml
+### group_vars/SPINES.yml
 
 type: l3spine     # Must be either spine|l3spine
 ```
 
 ```yaml
 ---
-### group_vars/DC1_LEAFS.yml
+### group_vars/LEAFS.yml
 
 type: l2leaf     # Must be l2leaf
 ```
 
 
+<span style="background-color:rgb(180, 180, 180);padding: 0.2em 0.4em;font-weight: bold">group_vars/NETWORK_SERVICES.yml:</span> Global AVD Configuration variables applying Switched Virtual Interfaces (SVI) to the Default routing instance.
+
+For each SVI create the assocated VLAN configuration is applied.
+The SVI parameter is "tagged" to be used in the FABRIC.yml for filtering trunk links between switches.
+
+```yaml
+---
+### group_vars/NETWORK_SERVICES.yml
+
+tenants:
+  - name: FABRIC
+    vrfs:
+      - name: default
+        svis:
+          - id: 110
+            name: 'IDF1-Data'
+            tags: ["110"]
+            enabled: true
+            ip_virtual_router_addresses:
+              - 10.1.10.1
+            nodes:
+              - node: SPINE1
+                ip_address: 10.1.10.2/23
+              - node: SPINE2
+                ip_address: 10.1.10.3/23
+          - id: 120
+            name: 'IDF1-Voice'
+            tags: ["120"]
+            enabled: true
+            ip_virtual_router_addresses:
+              - 10.1.20.1
+            nodes:
+              - node: SPINE1
+                ip_address: 10.1.20.2/23
+              - node: SPINE2
+                ip_address: 10.1.20.3/23
+```
 
 ### Build Playbook
