@@ -275,3 +275,32 @@ port_profiles:
 The global variables are in place and ready for the next steps
 
 ### Build Playbook
+
+1. arista.avd.eos_designs
+  🔹 <strong>Purpose:</strong> Generates structured configuration data models from your inventory (inventory.yml, group_vars, and host_vars). It also builds fabric-wide documentation.
+  
+    📤 <strong>Outputs:</strong>
+
+      - YAML data structures per device under structured_configs/
+      - Markdown-based documentation in fabric/documentation/
+
+📚 <strong>What it includes:</strong>
+
+- Interface assignments
+- BGP/EVPN settings 
+- VLANs/SVI definitions
+- Underlay/Overlay routing logic
+
+#### How They Work Together
+1. <span style="background-color:rgb(207, 207, 207);padding: 0.2em 0.4em;font-weight: bold">eos_designs:</span>
+   - Consumes your inventory and vars.
+   - Computes all design logic (interface IPs, routing adjacencies, etc.).
+   - Exports structured YAML data.
+2. <span style="background-color:rgb(207, 207, 207);padding: 0.2em 0.4em;font-weight: bold">eos_cli_config_gen:</span>
+   - Reads the structured YAML.
+   - Renders Jinja2 templates to EOS CLI syntax.
+   - Produces the actual config files and optional configlets.
+
+💡 <strong>Think of it this way:</strong>
+- <span style="background-color:rgb(207, 207, 207);padding: 0.2em 0.4em;font-weight: bold">eos_designs</span> = "What should this network do?"
+- <span style="background-color:rgb(207, 207, 207);padding: 0.2em 0.4em;font-weight: bold">eos_cli_config_gen</span> = "What CLI do I need to make that happen?"
