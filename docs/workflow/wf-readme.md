@@ -161,7 +161,6 @@ type: l3spine     # Must be either spine|l3spine
 type: l2leaf     # Must be l2leaf
 ```
 
-
 <span style="background-color:rgb(180, 180, 180);padding: 0.2em 0.4em;font-weight: bold">group_vars/NETWORK_SERVICES.yml:</span> Global AVD Configuration variables applying Switched Virtual Interfaces (SVI) to the Default routing instance.
 
 For each SVI create the assocated VLAN configuration is applied.
@@ -198,6 +197,81 @@ tenants:
                 ip_address: 10.1.20.2/23
               - node: SPINE2
                 ip_address: 10.1.20.3/23
+          - id: 130
+            name: 'IDF1-Guest'
+            tags: ["130"]
+            enabled: true
+            ip_virtual_router_addresses:
+              - 10.1.30.1
+            nodes:
+              - node: SPINE1
+                ip_address: 10.1.30.2/23
+              - node: SPINE2
+                ip_address: 10.1.30.3/23
 ```
+<span style="background-color:rgb(180, 180, 180);padding: 0.2em 0.4em;font-weight: bold">group_vars/NETWORK_PORTS.yml:</span> Global AVD Configuration variables applying switch port level configuration in the form of profiles.
+
+The following NETWORK_PORT.yml variable parameter file consists of applying port level configuration such as Vlan assignment, 802.1x, POE, and other feature in the form of profile to be assigned to the interface.
+
+```yaml
+---
+### group_vars/DC1_NETWORK_PORTS.yml
+
+### Port Profile
+
+port_profiles:
+  - profile: PP-DOT1X
+    mode: "trunk phone"
+    spanning_tree_portfast: edge
+    spanning_tree_bpduguard: enabled
+    poe:
+      priority: critical
+      reboot:
+        action: maintain
+      link_down:
+        action: maintain
+      shutdown:
+        action: power-off
+      limit:
+        class: 4
+    dot1x:
+      port_control: auto
+      reauthentication: true
+      pae:
+        mode: authenticator
+      host_mode:
+        mode: multi-host
+        multi_host_authenticated: true
+      mac_based_authentication:
+        enabled: true
+      timeout:
+        reauth_period: server
+        tx_period: 3
+      reauthorization_request_limit: 3
+
+# ---------------- IDF1 ----------------
+
+# Assign switch interfaces the port porfile above
+
+  - switches:
+      - LEAF1[AB] # regex match LEAF1A & LEAF1B
+    switch_ports:
+      - Ethernet1-48
+    description: IDF1 Standard Port
+    profile: PP-DOT1X # Assigned port porfile
+    native_vlan: 110
+    structured_config: # Direct injection of EOS CLI-equivalent configuration into the interface, used for edge cases or features not abstracted by AVD.
+      switchport:
+        phone:
+          trunk: untagged
+          vlan: 120
+    dot1x:
+      authentication_failure:
+        action: allow
+        allow_vlan: 130
+
+```
+
+The global variables are in place and ready for the next steps
 
 ### Build Playbook
