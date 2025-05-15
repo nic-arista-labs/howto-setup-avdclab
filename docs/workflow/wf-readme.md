@@ -6,6 +6,7 @@
 - [Role of Variables](#role-of-variables)
 - [Build Playbook](#build-playbook)
 - [Deploy Playbook](#deploy-playbook)
+- [Submit Pending Change Control via CVaaS](#submit-pending-change-control-via-cvaas)
 
 ### AVD Workflow Overview
 
