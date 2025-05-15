@@ -411,6 +411,7 @@ Below is an example of a build playbook for using cv-deploy role to connect CVaa
       vars:
         cv_server: www.cv-prod-us-central1-c.arista.io
         cv_token: "{{ lookup('env', 'CVP_PASSWORD') }}"
+
 ```
 
 #### What This Playbook Does
