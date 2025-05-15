@@ -463,3 +463,15 @@ SPINE1                     : ok=2    changed=1    unreachable=0    failed=0    s
 (venv) root@057f4a3b7a6a:/app/examples/campus-fabric# 
 ```
 
+### Submit Pending Change Control via CVaaS
+
+The deploy.yml playbook has completed.
+It has connected to the CVaaS with the provide service account token
+
+The playbook will created a workspace in studio and applied the appropreiate configuration per device.
+<image src='images/cvaas_studio_workspace_submitted.png' alt='CVaaS Studio Workspace'>
+
+Once Studios has completed its validation and build of the workspace a pending change control ticket will be ready for review and submittal
+
+<image src='images/cvaas_cc_pending.png' alt='CVaaS Change Control Pending'>
+
