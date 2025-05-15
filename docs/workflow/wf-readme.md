@@ -397,6 +397,8 @@ SPINE2                     : ok=2    changed=0    unreachable=0    failed=0    s
 
 <image src="images/avd_cv_deploy_diagram.png" alt="AVD cv_deploy Role Diagram" width="1200">
 
+Below is an example of a build playbook for using cv-deploy role to connect CVaaS
+
 ```yaml
 ---
 - name: Deploy Configurations to Devices Using CloudVision Portal
