@@ -466,6 +466,8 @@ SPINE1                     : ok=2    changed=1    unreachable=0    failed=0    s
 
 ### Submit Pending Change Control via CVaaS
 
+<strong>Review Studios Workspace and Pending Change Control Ticket</strong>
+
 The deploy.yml playbook has completed.
 It has connected to the CVaaS with the provide service account token
 
@@ -476,3 +478,17 @@ Once Studios has completed its validation and build of the workspace a pending c
 
 <image src='images/cvaas_cc_pending.png' alt='CVaaS Change Control Pending'>
 
+
+<strong>Submit Change Control Ticket</strong>
+
+1. Click on the pending change ticket
+2. Review changes
+3. Click "Approve and Execute" when ready
+
+CVaaS will execute pushing the configuration down to the switches finalizing the configuration on the entire fabric.
+
+<image src='images/cvaas_cc_approve.png' alt='CVaaS Change Control Approved' width='1000'>
+
+The change tichet is completed successfully!
+
+<image src='images/cvaas_cc_successful.png' alt='CVaaS Change Control Successful' width='1000'>
