@@ -393,6 +393,8 @@ SPINE2                     : ok=2    changed=0    unreachable=0    failed=0    s
 
 ### Deploy Playbook
 
+<image src="images/avd_cv_deploy_diagram.png" alt="AVD cv_deploy Role Diagram" width="1200">
+
 ```yaml
 ---
 - name: Deploy Configurations to Devices Using CloudVision Portal
