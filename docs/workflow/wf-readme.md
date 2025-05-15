@@ -7,6 +7,7 @@
 - [Build Playbook](#build-playbook)
 - [Deploy Playbook](#deploy-playbook)
 - [Submit Pending Change Control via CVaaS](#submit-pending-change-control-via-cvaas)
+- [References](#references)
 
 ### AVD Workflow Overview
 
