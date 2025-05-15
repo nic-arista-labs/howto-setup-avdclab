@@ -441,3 +441,25 @@ cv_token: "{{ lookup('env', 'CVP_PASSWORD') }}"
 ```
 
 <strong>Important:</strong> The service account should have sufficient permissions (typically read/write access to Config Studio, Devices, and Provisioning APIs).
+
+#### Example Output
+
+```bash
+(venv) root@057f4a3b7a6a:/app/examples/campus-fabric# ansible-playbook -i inventory.yml deploy-studio.yml 
+
+PLAY [Deploy Configurations to Devices Using CloudVision Portal] ********************************************************************
+
+TASK [arista.avd.cv_deploy : Verify Requirements] ***********************************************************************************
+AVD version 5.1.0
+Use -v for details.
+ok: [SPINE1 -> localhost]
+
+TASK [arista.avd.cv_deploy : Deploy device configurations and tags to CloudVision] **************************************************
+changed: [SPINE1 -> localhost]
+
+PLAY RECAP **************************************************************************************************************************
+SPINE1                     : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+(venv) root@057f4a3b7a6a:/app/examples/campus-fabric# 
+```
+
