@@ -492,3 +492,11 @@ CVaaS will execute pushing the configuration down to the switches finalizing the
 The change tichet is completed successfully!
 
 <image src='images/cvaas_cc_successful.png' alt='CVaaS Change Control Successful' width='1000'>
+
+### References
+
+- [Arista Netdevops Community](https://github.com/arista-netdevops-community)
+- [Arista AVD](https://avd.arista.com/5.4/index.html)
+- [Ansible Galaxy: arista.avd](https://galaxy.ansible.com/ui/repo/published/arista/avd/)
+- [Arista ANTA Framework](https://anta.arista.com/stable/)
+- [Arista PyAVD](https://avd.arista.com/5.4/docs/pyavd/pyavd.html)
