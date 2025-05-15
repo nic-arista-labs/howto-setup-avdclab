@@ -12,6 +12,8 @@
 
 This document outlines the workflow for using Arista Ansible Validated Designs (AVD) to automate and deploy network configurations to EOS devices via CloudVision as-a-Service (CVaaS).
 
+![AVD Workflow Diagram](images/avd-workflow-diagram.png)
+
 ### Inventory Structure
 
 Below is a simple basic Ansible file structure breakdown.
