@@ -299,6 +299,8 @@ The global variables are in place and ready for the next steps
 
 1. <span style="background-color:rgb(207, 207, 207);padding: 0.2em 0.4em;font-weight: bold">arista.avd.eos_designs</span>
   
+    <image src="images/avd_eos_designs_role_diagram.png">
+
     <strong>Purpose:</strong> Generates structured configuration data models from your inventory (inventory.yml, group_vars, and host_vars). It also builds fabric-wide documentation.
     
     <strong>Outputs:</strong>
@@ -311,7 +313,7 @@ The global variables are in place and ready for the next steps
    - VLANs/SVI definitions
    - Underlay/Overlay routing logic
 <br>
-2. <span style="background-color:rgb(207, 207, 207);padding: 0.2em 0.4em;font-weight: bold">arista.avd.eos_cli_config_gen</span>
+1. <span style="background-color:rgb(207, 207, 207);padding: 0.2em 0.4em;font-weight: bold">arista.avd.eos_cli_config_gen</span>
   
     <strong>Purpose:</strong> Takes the structured config output from eos_designs and renders CLI-ready EOS configurations using Jinja2 templates.
     
