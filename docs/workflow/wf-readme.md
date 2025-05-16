@@ -499,6 +499,19 @@ The change tichet is completed successfully!
 
 ### References
 
+**Get Started**
+
+- [Install Arista AVD](https://avd.arista.com/5.4/docs/installation/collection-installation.html)
+- [Getting Started](https://avd.arista.com/5.4/docs/getting-started/intro-to-ansible-and-avd.html)
+- [Examples - Campus Fabric](https://avd.arista.com/5.4/ansible_collections/arista/avd/examples/campus-fabric/index.html)
+
+**Arista AVD Ansible Roles**
+- [eos_design](https://avd.arista.com/5.4/ansible_collections/arista/avd/roles/eos_designs/index.html)
+- [eos_cli_config_gen](https://avd.arista.com/5.4/ansible_collections/arista/avd/roles/eos_cli_config_gen/index.html)
+- [cv_deploy](https://avd.arista.com/5.4/ansible_collections/arista/avd/roles/cv_deploy/index.html)
+
+**Addititional Information**
+
 - [Arista Netdevops Community](https://github.com/arista-netdevops-community)
 - [Arista AVD](https://avd.arista.com/5.4/index.html)
 - [Ansible Galaxy: arista.avd](https://galaxy.ansible.com/ui/repo/published/arista/avd/)
