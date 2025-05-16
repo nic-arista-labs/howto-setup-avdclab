@@ -317,7 +317,7 @@ The global variables are in place and ready for the next steps
 <br>
 2. <span style="background-color:rgb(207, 207, 207);padding: 0.2em 0.4em;font-weight: bold">arista.avd.eos_cli_config_gen</span>
   
-    <image src="images/avd_eos_cli_config_gen_diagram.png" atl="AVD eos_cli_config_gen Role Diagram">
+    ![AVD eos_cli_config_gen Role Diagram](./images/avd_eos_cli_config_gen_diagram.png)
 
     <strong>Purpose:</strong> Takes the structured config output from eos_designs and renders CLI-ready EOS configurations using Jinja2 templates.
     
@@ -413,11 +413,11 @@ Below is an example of a build playbook for using cv-deploy role to connect CVaa
       vars:
         cv_server: www.cv-prod-us-central1-c.arista.io
         cv_token: "{{ lookup('env', 'CVP_PASSWORD') }}"
-
 ```
 
 #### What This Playbook Does
-The <strong>deploy.yml</strong> playbook pushes the rendered EOS configurations to CloudVision as-a-Service (CVaaS) using the arista.avd.cv_deploy role. Specifically:
+
+The **deploy.yml** playbook pushes the rendered EOS configurations to CloudVision as-a-Service (CVaaS) using the arista.avd.cv_deploy role. Specifically:
 
 <span style="background-color:rgb(207, 207, 207);padding: 0.2em 0.4em;font-weight: bold">cv_deploy Role Workflow:</span>
 1. Reads intended configs from the intended_configs/ directory.
@@ -480,8 +480,7 @@ The playbook will created a workspace in studio and applied the appropreiate con
 
 Once Studios has completed its validation and build of the workspace a pending change control ticket will be ready for review and submittal
 
-<image src='images/cvaas_cc_pending.png' alt='CVaaS Change Control Pending'>
-
+![CVaaS Change Control Pending](./images/cvaas_cc_pending.png)
 
 <strong>Submit Change Control Ticket</strong>
 
@@ -491,11 +490,11 @@ Once Studios has completed its validation and build of the workspace a pending c
 
 CVaaS will execute pushing the configuration down to the switches finalizing the configuration on the entire fabric.
 
-<image src='images/cvaas_cc_approve.png' alt='CVaaS Change Control Approved' width='1000'>
+![CVaaS Change Control Approved](./images/cvaas_cc_approve.png)
 
 The change tichet is completed successfully!
 
-<image src='images/cvaas_cc_successful.png' alt='CVaaS Change Control Successful' width='1000'>
+![CVaaS Change Control Successful](./images/cvaas_cc_successful.png)
 
 ### References
 
