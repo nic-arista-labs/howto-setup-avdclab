@@ -63,7 +63,8 @@ all:
 
 ### Role of Variables
 
-<span style="background-color:rgb(180, 180, 180);padding: 0.2em 0.4em;font-weight: bold">group_vars/all.yml:</span> Global AVD variables shared by all devices.
+<code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">group_vars/all.yml</code> Global AVD variables shared by all devices.
+
 This is a great place to store the required Arista eAPI and SSH connection parameters. Ansible can reference these parameters for all devices in the inventory file.
 
 AVD uses these connection parameters to make direct connections to the devices to perforem some unique task such as update documentation.
@@ -80,7 +81,7 @@ ansible_become_method: enable
 ansible_become_password: admin
 ```
 
-<span style="background-color:rgb(180, 180, 180);padding: 0.2em 0.4em;font-weight: bold">group_vars/FABRIC.yml:</span> Global AVD Configuration variables applied to all device under the tree heiarchy.
+<code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">group_vars/FABRIC.yml:</code> Global AVD Configuration variables applied to all device under the tree heiarchy.
 
 These configurations will outline the which devices are group and have mLAG applied.
 Also, the uplinks and interface designations to the spine are referenced from this .yml structure file.
@@ -147,7 +148,7 @@ l2leaf:
           uplink_switch_interfaces: [Ethernet1]
 ```
 
-<span style="background-color:rgb(180, 180, 180);padding: 0.2em 0.4em;font-weight: bold">group_vars/SPINES.yml: & LEAFS.yml</span> Global AVD Configuration variables which specify or designate the type of category the switch hosts belong to. The yaml file destigantes the switch host to be either a spine or a leaf in the topology.
+<code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">group_vars/SPINES.yml: & LEAFS.yml</code> Global AVD Configuration variables which specify or designate the type of category the switch hosts belong to. The yaml file destigantes the switch host to be either a spine or a leaf in the topology.
 
 You should notice the type designation aligns with the parameters outlined in the FABRIC.yml variables file
 
@@ -166,7 +167,7 @@ type: l3spine     # Must be either spine|l3spine
 type: l2leaf     # Must be l2leaf
 ```
 
-<span style="background-color:rgb(180, 180, 180);padding: 0.2em 0.4em;font-weight: bold">group_vars/NETWORK_SERVICES.yml:</span> Global AVD Configuration variables applying Switched Virtual Interfaces (SVI) to the Default routing instance.
+<code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">group_vars/NETWORK_SERVICES.yml:</code> Global AVD Configuration variables applying Switched Virtual Interfaces (SVI) to the Default routing instance.
 
 For each SVI create the assocated VLAN configuration is applied.
 The SVI parameter is "tagged" to be used in the FABRIC.yml for filtering trunk links between switches.
@@ -214,7 +215,7 @@ tenants:
               - node: SPINE2
                 ip_address: 10.1.30.3/23
 ```
-<span style="background-color:rgb(180, 180, 180);padding: 0.2em 0.4em;font-weight: bold">group_vars/NETWORK_PORTS.yml:</span> Global AVD Configuration variables applying switch port level configuration in the form of profiles.
+<code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">group_vars/NETWORK_PORTS.yml:</code> Global AVD Configuration variables applying switch port level configuration in the form of profiles.
 
 The following NETWORK_PORT.yml variable parameter file consists of applying port level configuration such as Vlan assignment, 802.1x, POE, and other feature in the form of profile to be assigned to the interface.
 
@@ -299,7 +300,7 @@ The global variables are in place and ready for the next steps
         name: arista.avd.eos_cli_config_gen
 ```
 
-1. <span style="background-color:rgb(207, 207, 207);padding: 0.2em 0.4em;font-weight: bold">arista.avd.eos_designs</span>
+1. <code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">arista.avd.eos_designs</code>
   
     ![AVD eos_designs Role Diagram](./images/avd_eos_designs_role_diagram.png)
 
@@ -315,7 +316,7 @@ The global variables are in place and ready for the next steps
    - VLANs/SVI definitions
    - Underlay/Overlay routing logic
 <br>
-1. <span style="background-color:rgb(207, 207, 207);padding: 0.2em 0.4em;font-weight: bold">arista.avd.eos_cli_config_gen</span>
+1. <code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">arista.avd.eos_cli_config_gen</code>
   
     ![AVD eos_cli_config_gen Role Diagram](./images/avd_eos_cli_config_gen_diagram.png)
 
@@ -331,18 +332,18 @@ The global variables are in place and ready for the next steps
    - Ready to push to EOS or CVaaS
 
 #### How They Work Together
-1. <span style="background-color:rgb(207, 207, 207);padding: 0.2em 0.4em;font-weight: bold">eos_designs:</span>
+1. <code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">eos_designs:</code>
    - Consumes your inventory and vars.
    - Computes all design logic (interface IPs, routing adjacencies, etc.).
    - Exports structured YAML data.
-2. <span style="background-color:rgb(207, 207, 207);padding: 0.2em 0.4em;font-weight: bold">eos_cli_config_gen:</span>
+2. <code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">eos_cli_config_gen:</code>
    - Reads the structured YAML.
    - Renders Jinja2 templates to EOS CLI syntax.
    - Produces the actual config files and optional configlets.
 
 💡 **Think of it this way:**
-- <span style="background-color:rgb(207, 207, 207);padding: 0.2em 0.4em;font-weight: bold">eos_designs</span> = "What should this network do?"
-- <span style="background-color:rgb(207, 207, 207);padding: 0.2em 0.4em;font-weight: bold">eos_cli_config_gen</span> = "What CLI do I need to make that happen?"
+- <code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">eos_designs</code> = "What should this network do?"
+- <code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">eos_cli_config_gen</code> = "What CLI do I need to make that happen?"
 
 #### Example Output
 
@@ -419,7 +420,7 @@ Below is an example of a build playbook for using cv-deploy role to connect CVaa
 
 The **deploy.yml** playbook pushes the rendered EOS configurations to CloudVision as-a-Service (CVaaS) using the arista.avd.cv_deploy role. Specifically:
 
-<span style="background-color:rgb(207, 207, 207);padding: 0.2em 0.4em;font-weight: bold">cv_deploy Role Workflow:</span>
+<code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">cv_deploy Role Workflow:</code>
 1. Reads intended configs from the intended_configs/ directory.
 2. Connects to CVaaS using the cv_server and cv_token.
 3. Creates or updates configlets in CloudVision Studio.
