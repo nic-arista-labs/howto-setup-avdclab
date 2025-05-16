@@ -301,7 +301,7 @@ The global variables are in place and ready for the next steps
 
 1. <span style="background-color:rgb(207, 207, 207);padding: 0.2em 0.4em;font-weight: bold">arista.avd.eos_designs</span>
   
-    <image src="images/avd_eos_designs_role_diagram.png" alt="AVD eos_designs Role Diagram">
+    ![AVD eos_designs Role Diagram](./images/avd_eos_designs_role_diagram.png)
 
     <strong>Purpose:</strong> Generates structured configuration data models from your inventory (inventory.yml, group_vars, and host_vars). It also builds fabric-wide documentation.
     
@@ -315,7 +315,7 @@ The global variables are in place and ready for the next steps
    - VLANs/SVI definitions
    - Underlay/Overlay routing logic
 <br>
-2. <span style="background-color:rgb(207, 207, 207);padding: 0.2em 0.4em;font-weight: bold">arista.avd.eos_cli_config_gen</span>
+1. <span style="background-color:rgb(207, 207, 207);padding: 0.2em 0.4em;font-weight: bold">arista.avd.eos_cli_config_gen</span>
   
     ![AVD eos_cli_config_gen Role Diagram](./images/avd_eos_cli_config_gen_diagram.png)
 
@@ -476,7 +476,8 @@ The deploy.yml playbook has completed.
 It has connected to the CVaaS with the provide service account token
 
 The playbook will created a workspace in studio and applied the appropreiate configuration per device.
-<image src='images/cvaas_studio_workspace_submitted.png' alt='CVaaS Studio Workspace'>
+
+![CVaaS Studio Workspace](./images/cvaas_studio_workspace_submitted.png)
 
 Once Studios has completed its validation and build of the workspace a pending change control ticket will be ready for review and submittal
 
