@@ -303,13 +303,13 @@ The global variables are in place and ready for the next steps
   
     ![AVD eos_designs Role Diagram](./images/avd_eos_designs_role_diagram.png)
 
-    <strong>Purpose:</strong> Generates structured configuration data models from your inventory (inventory.yml, group_vars, and host_vars). It also builds fabric-wide documentation.
+    **Purpose:** Generates structured configuration data models from your inventory (inventory.yml, group_vars, and host_vars). It also builds fabric-wide documentation.
     
-    <strong>Outputs:</strong>
+    **Outputs:**
     - YAML data structures per device under structured_configs/
     - Markdown-based documentation in fabric/documentation/
 
-    <strong>What it includes:</strong>
+    **What it includes:**
    - Interface assignments
    - BGP/EVPN settings 
    - VLANs/SVI definitions
@@ -319,13 +319,13 @@ The global variables are in place and ready for the next steps
   
     ![AVD eos_cli_config_gen Role Diagram](./images/avd_eos_cli_config_gen_diagram.png)
 
-    <strong>Purpose:</strong> Takes the structured config output from eos_designs and renders CLI-ready EOS configurations using Jinja2 templates.
+    **Purpose:** Takes the structured config output from eos_designs and renders CLI-ready EOS configurations using Jinja2 templates.
     
-    <strong>Outputs:</strong>
+    **Outputs:**
     - Flat text configuration files per device in intended_configs/
     - Optionally, generated_configlets/ for CVP Studio
 
-    <strong>What it includes:</strong>
+    **What it includes:**
    - Complete running-config per device
    - Platform-specific syntax (MLAG, port-channel, BGP, etc.)
    - Ready to push to EOS or CVaaS
@@ -340,7 +340,7 @@ The global variables are in place and ready for the next steps
    - Renders Jinja2 templates to EOS CLI syntax.
    - Produces the actual config files and optional configlets.
 
-💡 <strong>Think of it this way:</strong>
+💡 **Think of it this way:**
 - <span style="background-color:rgb(207, 207, 207);padding: 0.2em 0.4em;font-weight: bold">eos_designs</span> = "What should this network do?"
 - <span style="background-color:rgb(207, 207, 207);padding: 0.2em 0.4em;font-weight: bold">eos_cli_config_gen</span> = "What CLI do I need to make that happen?"
 
@@ -431,7 +431,7 @@ The **deploy.yml** playbook pushes the rendered EOS configurations to CloudVisio
 To authenticate with CVaaS securely:
 
 Use a Service Account
-- A CloudVision service account must be created in the CVaaS <strong>Settings > Users > Service Accounts section.</strong>
+- A CloudVision service account must be created in the CVaaS **Settings > Users > Service Accounts section.**
 - Generate an API access token for this account.
 - Store this token as an environment variable or Ansible Vault.
 
@@ -445,7 +445,7 @@ Using an environment variable is an easy and secure way to pass the token into t
 cv_token: "{{ lookup('env', 'CVP_PASSWORD') }}"
 ```
 
-<strong>Important:</strong> The service account should have sufficient permissions (typically read/write access to Config Studio, Devices, and Provisioning APIs).
+**Important:** The service account should have sufficient permissions (typically read/write access to Config Studio, Devices, and Provisioning APIs).
 
 #### Example Output
 
@@ -470,7 +470,7 @@ SPINE1                     : ok=2    changed=1    unreachable=0    failed=0    s
 
 ### Submit Pending Change Control via CVaaS
 
-<strong>Review Studios Workspace and Pending Change Control Ticket</strong>
+**Review Studios Workspace and Pending Change Control Ticket**
 
 The deploy.yml playbook has completed.
 It has connected to the CVaaS with the provide service account token
@@ -483,7 +483,7 @@ Once Studios has completed its validation and build of the workspace a pending c
 
 ![CVaaS Change Control Pending](./images/cvaas_cc_pending.png)
 
-<strong>Submit Change Control Ticket</strong>
+**Submit Change Control Ticket**
 
 1. Click on the pending change ticket
 2. Review changes
