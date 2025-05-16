@@ -397,7 +397,7 @@ SPINE2                     : ok=2    changed=0    unreachable=0    failed=0    s
 
 AVD cv_deploy role diagram
 
-<image src="images/avd_cv_deploy_diagram.png" atl="AVD cv_deploy Role Diagram">
+![AVD cv_deploy Role Diagram](./images/avd_cv_deploy_diagram.png)
 
 Below is an example of a build playbook for using cv-deploy role to connect CVaaS
 
