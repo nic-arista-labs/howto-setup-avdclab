@@ -1,40 +1,50 @@
 # Arista AVD Workflow
 
 ## Table of Contents
-- [AVD Workflow Overview](workflow-overview)
-- [Inventory Structure](#inventory-structure)
-- [Role of Variables](#role-of-variables)
-- [Build Playbook](#build-playbook)
-- [Deploy Playbook](#deploy-playbook)
-- [Submit Pending Change Control via CVaaS](#submit-pending-change-control-via-cvaas)
-- [References](#references)
+- [Arista AVD Workflow](#arista-avd-workflow)
+  - [Table of Contents](#table-of-contents)
+  - [AVD Workflow Overview](#avd-workflow-overview)
+  - [Inventory Structure](#inventory-structure)
+    - [Role of Variables](#role-of-variables)
+    - [Build Playbook](#build-playbook)
+      - [How They Work Together](#how-they-work-together)
+      - [Example Output](#example-output)
+  - [Deploy Playbook](#deploy-playbook)
+    - [Playbook Functionality](#playbook-functionality)
+    - [CVaaS/CVP Authentication](#cvaascvp-authentication)
+    - [Example Output](#example-output-1)
+  - [Submit Pending Change Control via CVaaS](#submit-pending-change-control-via-cvaas)
+    - [Review Studio Workspace and Pending Change Control](#review-studio-workspace-and-pending-change-control)
+    - [Submit Change Control](#submit-change-control)
+  - [References](#references)
+    - [Getting Started](#getting-started)
+    - [Arista AVD Ansible Roles](#arista-avd-ansible-roles)
+    - [Addititional Information](#addititional-information)
 
-### AVD Workflow Overview
-
+## AVD Workflow Overview
 
 This document outlines the workflow for using Arista Ansible Validated Designs (AVD) to automate and deploy network configurations to EOS devices via CloudVision as-a-Service (CVaaS).
 
 ![AVD Workflow Diagram](images/avd-workflow-diagram.png)
 
-### Inventory Structure
+## Inventory Structure
 
-Below is a simple basic Ansible file structure breakdown.
+Below is a basic Ansible file structure breakdown:
 
 ```bash
-project_rooot/
+project_root/
 ├── inventory.yml              # Main inventory file
 ├── group_vars/                # Global Ansible groups directory
-├── └── all.yml                # Glodal Ansible variables yaml file
-├── └── <group>.yml            # Group variables yaml file
+│   ├── all.yml                # Global Ansible variables YAML file
+│   ├── <group>.yml            # Group variables YAML file
 │   └── custom-head.html       # Custom header/footer
 ├── host_vars/                 # Global Ansible hosts directory
-│   └── <device-hosname>.yml   # host specific variables
-├── build.yml                  # playbook to render configuration
-├── deploy.yml                 # playbook to push configuration to CVaaS/CVP
-
+│   └── <device-hostname>.yml  # Host-specific variables
+├── build.yml                  # Playbook to render configuration
+└── deploy.yml                 # Playbook to push configuration to CVaaS/CVP
 ```
-Here is an example of the Ansible inventory file that can use used to define your AVD topology.
-This YAML file example defines the topology (fabric) and host relationships.
+
+Here is an example of an Ansible inventory file that can be used to define your AVD topology. This YAML file defines the topology (fabric) and host relationships:
 
 ```yaml
 ---
@@ -50,8 +60,8 @@ all:
         LEAFS:
           hosts:
             leaf1a:
-            leaf2b:
-    NETWORK_SERVIVES:
+            leaf1b:
+    NETWORK_SERVICES:
       children:
         LEAFS:
         SPINES:
@@ -63,13 +73,9 @@ all:
 
 ### Role of Variables
 
-<code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">group_vars/all.yml</code> Global AVD variables shared by all devices.
+<code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">group_vars/all.yml</code> - Global All 'Shared' Variables
 
-This is a great place to store the required Arista eAPI and SSH connection parameters. Ansible can reference these parameters for all devices in the inventory file.
-
-AVD uses these connection parameters to make direct connections to the devices to perforem some unique task such as update documentation.
-
-Ansible can used to query the network to help gather information.
+Global variables shared by all devices. This is where you store Arista eAPI and SSH connection parameters that Ansible can reference for all devices in the inventory file.
 
 ```yaml
 ansible_user: admin
@@ -81,10 +87,9 @@ ansible_become_method: enable
 ansible_become_password: admin
 ```
 
-<code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">group_vars/FABRIC.yml:</code> Global AVD Configuration variables applied to all device under the tree heiarchy.
+<code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">group_vars/FABRIC.yml:</code> - Top Level -  AVD Configuration Variables
 
-These configurations will outline the which devices are group and have mLAG applied.
-Also, the uplinks and interface designations to the spine are referenced from this .yml structure file.
+Variables applied to all devices under the inventory hierarchy. This could include the FABRIC, DATACENTER, or CAMPUS top layer of the architecture. These configurations define device groups, mLAG settings, uplinks, and common domain configurations.
 
 ```yaml
 # CloudVision TerminAtter definitions
@@ -147,35 +152,29 @@ l2leaf:
           uplink_switches: [SPINE2]
           uplink_switch_interfaces: [Ethernet1]
 ```
+<code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">group_vars/SPINES.yml</code> & <code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">LEAFS.yml</code> - Device Type Variables
 
-<code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">group_vars/SPINES.yml: & LEAFS.yml</code> Global AVD Configuration variables which specify or designate the type of category the switch hosts belong to. The yaml file destigantes the switch host to be either a spine or a leaf in the topology.
-
-You should notice the type designation aligns with the parameters outlined in the FABRIC.yml variables file
-
+These files specify the category (spine or leaf) that switch hosts belong to in the topology. The type designation aligns with parameters outlined in the FABRIC.yml variables file.
 
 ```yaml
 ---
 ### group_vars/SPINES.yml
-
 type: l3spine     # Must be either spine|l3spine
 ```
 
 ```yaml
 ---
 ### group_vars/LEAFS.yml
-
 type: l2leaf     # Must be l2leaf
 ```
 
-<code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">group_vars/NETWORK_SERVICES.yml:</code> Global AVD Configuration variables applying Switched Virtual Interfaces (SVI) to the Default routing instance.
+<code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">group_vars/NETWORK_SERVICES.yml</code> - SVI Configuration
 
-For each SVI create the assocated VLAN configuration is applied.
-The SVI parameter is "tagged" to be used in the FABRIC.yml for filtering trunk links between switches.
+Variables for applying Switched Virtual Interfaces (SVI) to the default routing instance. Each SVI creates an associated VLAN configuration that is "tagged" for filtering trunk links between switches.
 
 ```yaml
 ---
 ### group_vars/NETWORK_SERVICES.yml
-
 tenants:
   - name: FABRIC
     vrfs:
@@ -215,16 +214,16 @@ tenants:
               - node: SPINE2
                 ip_address: 10.1.30.3/23
 ```
-<code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">group_vars/NETWORK_PORTS.yml:</code> Global AVD Configuration variables applying switch port level configuration in the form of profiles.
 
-The following NETWORK_PORT.yml variable parameter file consists of applying port level configuration such as Vlan assignment, 802.1x, POE, and other feature in the form of profile to be assigned to the interface.
+<code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">group_vars/NETWORK_PORTS.yml</code> - Port Configuration
+
+Variables for applying switch port-level configuration in the form of profiles, including VLAN assignment, 802.1x, POE, and other features.
 
 ```yaml
 ---
 ### group_vars/DC1_NETWORK_PORTS.yml
 
 ### Port Profile
-
 port_profiles:
   - profile: PP-DOT1X
     mode: "trunk phone"
@@ -256,9 +255,7 @@ port_profiles:
       reauthorization_request_limit: 3
 
 # ---------------- IDF1 ----------------
-
 # Assign switch interfaces the port porfile above
-
   - switches:
       - LEAF1[AB] # regex match LEAF1A & LEAF1B
     switch_ports:
@@ -275,17 +272,15 @@ port_profiles:
       authentication_failure:
         action: allow
         allow_vlan: 130
-
 ```
 
-The global variables are in place and ready for the next steps
+The global variables are now in place and ready for the next steps.
 
 ### Build Playbook
 
 ```yaml
 ---
 # build.yml
-
 - name: Build Configs
   hosts: FABRIC
   gather_facts: false
@@ -300,50 +295,59 @@ The global variables are in place and ready for the next steps
         name: arista.avd.eos_cli_config_gen
 ```
 
-1. <code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">arista.avd.eos_designs</code>
-  
-    ![AVD eos_designs Role Diagram](./images/avd_eos_designs_role_diagram.png)
+<code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">arista.avd.eos_designs</code>
 
-    **Purpose:** Generates structured configuration data models from your inventory (inventory.yml, group_vars, and host_vars). It also builds fabric-wide documentation.
-    
-    **Outputs:**
-    - YAML data structures per device under structured_configs/
-    - Markdown-based documentation in fabric/documentation/
+![AVD eos_designs Role Diagram](./images/avd_eos_designs_role_diagram.png)
 
-    **What it includes:**
-   - Interface assignments
-   - BGP/EVPN settings 
-   - VLANs/SVI definitions
-   - Underlay/Overlay routing logic
-<br>
-1. <code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">arista.avd.eos_cli_config_gen</code>
-  
-    ![AVD eos_cli_config_gen Role Diagram](./images/avd_eos_cli_config_gen_diagram.png)
+**Purpose:** Generates structured configuration data models from your inventory (inventory.yml, group_vars, and host_vars) and builds fabric-wide documentation.
 
-    **Purpose:** Takes the structured config output from eos_designs and renders CLI-ready EOS configurations using Jinja2 templates.
-    
-    **Outputs:**
-    - Flat text configuration files per device in intended_configs/
-    - Optionally, generated_configlets/ for CVP Studio
+**Outputs:**
 
-    **What it includes:**
-   - Complete running-config per device
-   - Platform-specific syntax (MLAG, port-channel, BGP, etc.)
-   - Ready to push to EOS or CVaaS
+- YAML data structures per device under <code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">structured_configs/</code>
+- Markdown-based documentation in <code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">documentation/fabric/</code>
+
+**Include:**
+
+- Interface assignments 
+- BGP/EVPN settings
+- VLANs/SVI definitions
+- Underlay/Overlay routing logic
+
+<code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">arista.avd.eos_cli_config_gen</code>
+
+![AVD eos_cli_config_gen Role Diagram](./images/avd_eos_cli_config_gen_diagram.png)
+
+**Purpose:** Converts structured config output from eos_designs into CLI-ready EOS configurations using Jinja2 templates.
+
+**Outputs:**
+
+- Flat text configuration files per device in <code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">intended/configs/</code>
+- Optionally, <code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">intended/structured_configs/</code> for CVP Studio
+
+**Include:**
+
+- Complete running-config per device
+- Platform-specific syntax (MLAG, port-channel, BGP, etc.)
+- Ready to push to EOS or CVaaS
 
 #### How They Work Together
-1. <code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">eos_designs:</code>
-   - Consumes your inventory and vars.
-   - Computes all design logic (interface IPs, routing adjacencies, etc.).
-   - Exports structured YAML data.
-2. <code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">eos_cli_config_gen:</code>
-   - Reads the structured YAML.
-   - Renders Jinja2 templates to EOS CLI syntax.
-   - Produces the actual config files and optional configlets.
 
-💡 **Think of it this way:**
-- <code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">eos_designs</code> = "What should this network do?"
-- <code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">eos_cli_config_gen</code> = "What CLI do I need to make that happen?"
+**eos_designs:**
+
+- Processes inventory and variables
+- Computes design logic (interface IPs, routing adjacencies, etc.)
+- Exports structured YAML data
+
+**eos_cli_config_gen:**
+
+- Reads structured YAML
+- Renders Jinja2 templates to EOS CLI syntax
+- Produces config files and optional configlets
+
+💡 **Key Concept:**
+
+- <code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">eos_designs</code> = Defines "What should this network do?"
+- <code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">eos_cli_config_gen</code> = Generates "What CLI is needed to implement it?"
 
 #### Example Output
 
@@ -385,7 +389,6 @@ ok: [SPINE2 -> localhost]
 ok: [LEAF1A -> localhost]
 ok: [LEAF1B -> localhost]
 
-
 PLAY RECAP ************************************************************************************************************************************************************************************************
 LEAF1A                     : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
 LEAF1B                     : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0      
@@ -393,14 +396,11 @@ SPINE1                     : ok=7    changed=0    unreachable=0    failed=0    s
 SPINE2                     : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
 ```
 
-
-### Deploy Playbook
-
-AVD cv_deploy role diagram
+## Deploy Playbook
 
 ![AVD cv_deploy Role Diagram](./images/avd_cv_deploy_diagram.png)
 
-Below is an example of a build playbook for using cv-deploy role to connect CVaaS
+Example deploy playbook using the cv_deploy role to connect to CVaaS:
 
 ```yaml
 - name: Deploy Configurations to Devices Using CloudVision Portal
@@ -416,39 +416,40 @@ Below is an example of a build playbook for using cv-deploy role to connect CVaa
         cv_token: "{{ lookup('env', 'CVP_PASSWORD') }}"
 ```
 
-#### What This Playbook Does
+### Playbook Functionality
 
-The **deploy.yml** playbook pushes the rendered EOS configurations to CloudVision as-a-Service (CVaaS) using the arista.avd.cv_deploy role. Specifically:
+The **deploy.yml** playbook pushes rendered EOS configurations to CloudVision as-a-Service (CVaaS) using the <code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">arista.avd.cv_deploy</code> role:
 
-<code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">cv_deploy Role Workflow:</code>
-1. Reads intended configs from the intended_configs/ directory.
-2. Connects to CVaaS using the cv_server and cv_token.
-3. Creates or updates configlets in CloudVision Studio.
-4. Assigns configlets to the appropriate devices.
-5. Optionally, initiates config proposals for user approval (Studio mode).
-6. Verifies assignment and returns status.
+<code style="background:#b4b4b4;padding:0.2em 0.4em;font-weight:bold">cv_deploy</code> Role Workflow:
 
-#### CVaaS/CVP Authentication: Token Requirement
-To authenticate with CVaaS securely:
+1. Reads intended configs from intended_configs/
+2. Connects to CVaaS using cv_server and cv_token
+3. Creates/updates configlets in CloudVision Studio
+4. Assigns configlets to appropriate devices
+5. Optionally initiates config proposals for approval (Studio mode)
+6. Verifies assignment and returns status
 
-Use a Service Account
-- A CloudVision service account must be created in the CVaaS **Settings > Users > Service Accounts section.**
-- Generate an API access token for this account.
-- Store this token as an environment variable or Ansible Vault.
+### CVaaS/CVP Authentication
+
+**Token Requirements:**
+
+1. Create a CloudVision service account in **Settings > Users > Service Accounts**
+2. Generate an API access token
+3. Store token as an environment variable or in Ansible Vault
 
 ```bash
 export CVP_PASSWORD="your_cvaas_service_account_token"
 ```
 
-Using an environment variable is an easy and secure way to pass the token into the playbook via:
+The playbook references this token via:
 
 ```yaml
 cv_token: "{{ lookup('env', 'CVP_PASSWORD') }}"
 ```
 
-**Important:** The service account should have sufficient permissions (typically read/write access to Config Studio, Devices, and Provisioning APIs).
+**Note:** The service account requires read/write access to Config Studio, Devices, and Provisioning APIs.
 
-#### Example Output
+### Example Output
 
 ```bash
 (venv) root@057f4a3b7a6a:/app/examples/campus-fabric# ansible-playbook -i inventory.yml deploy-studio.yml 
@@ -469,49 +470,45 @@ SPINE1                     : ok=2    changed=1    unreachable=0    failed=0    s
 (venv) root@057f4a3b7a6a:/app/examples/campus-fabric# 
 ```
 
-### Submit Pending Change Control via CVaaS
+## Submit Pending Change Control via CVaaS
 
-**Review Studios Workspace and Pending Change Control Ticket**
+### Review Studio Workspace and Pending Change Control
 
-The deploy.yml playbook has completed.
-It has connected to the CVaaS with the provide service account token
+After the deploy.yml playbook completes:
 
-The playbook will created a workspace in studio and applied the appropreiate configuration per device.
+1. A workspace is created in Studio with device-specific configurations
+2. A pending change control ticket is generated after validation
 
 ![CVaaS Studio Workspace](./images/cvaas_studio_workspace_submitted.png)
 
-Once Studios has completed its validation and build of the workspace a pending change control ticket will be ready for review and submittal
-
 ![CVaaS Change Control Pending](./images/cvaas_cc_pending.png)
 
-**Submit Change Control Ticket**
+### Submit Change Control
 
 1. Click on the pending change ticket
 2. Review changes
 3. Click "Approve and Execute" when ready
 
-CVaaS will execute pushing the configuration down to the switches finalizing the configuration on the entire fabric.
+CVaaS will push configurations to all switches in the fabric.
 
 ![CVaaS Change Control Approved](./images/cvaas_cc_approve.png)
 
-The change tichet is completed successfully!
-
 ![CVaaS Change Control Successful](./images/cvaas_cc_successful.png)
 
-### References
+## References
 
-**Get Started**
+### Getting Started
 
 - [Install Arista AVD](https://avd.arista.com/5.4/docs/installation/collection-installation.html)
-- [Getting Started](https://avd.arista.com/5.4/docs/getting-started/intro-to-ansible-and-avd.html)
-- [Examples - Campus Fabric](https://avd.arista.com/5.4/ansible_collections/arista/avd/examples/campus-fabric/index.html)
+- [Getting Started Guide](https://avd.arista.com/5.4/docs/getting-started/intro-to-ansible-and-avd.html)
+- [Campus Fabric Example](https://avd.arista.com/5.4/ansible_collections/arista/avd/examples/campus-fabric/index.html)
 
-**Arista AVD Ansible Roles**
+### Arista AVD Ansible Roles
 - [eos_design](https://avd.arista.com/5.4/ansible_collections/arista/avd/roles/eos_designs/index.html)
 - [eos_cli_config_gen](https://avd.arista.com/5.4/ansible_collections/arista/avd/roles/eos_cli_config_gen/index.html)
 - [cv_deploy](https://avd.arista.com/5.4/ansible_collections/arista/avd/roles/cv_deploy/index.html)
 
-**Addititional Information**
+### Addititional Information
 
 - [Arista Netdevops Community](https://github.com/arista-netdevops-community)
 - [Arista AVD](https://avd.arista.com/5.4/index.html)
