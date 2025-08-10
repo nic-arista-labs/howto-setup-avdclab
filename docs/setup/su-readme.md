@@ -101,11 +101,96 @@ Orbstack has a really cool integration for VSCode. When using the Remote Explore
 curl -sL https://containerlab.dev/setup | sudo -E bash -s "all"
 ```
 
-3. My preference to help manage Docker images and container is to use the VSC extension for Docker. We will install on the docker extension for VSC.
+3. My preference to helping manage Docker images and container is to use the VSC extension for Docker. We will install on the docker extension for VSC. This feature is now built into VSC console.
 
 ![VSC Docker Extension Install](images/vsc_extension_dockerInstall.png)
 
-## Step 3: Install Arista AVD on Host VM
+
+## Step 3: Install Arista AVD on Orb Host VM
+
+### Installation workflow
+  - Install Python 3.10 or later
+  - Install arista.avd collection including Python requirements.
+  - Modify ansible.cfg file to support additional jinja2 extensions
+
+[AVD Installation Guide](https://avd.arista.com/5.4/docs/installation/collection-installation.html)
+
+1. Validate Python version on orb host
+
+```bash
+$ python3 --version
+Python 3.12.3
+```
+
+2. Create the python virtual environment. The python AVD and Ansible libraries will be installed in this environment.
+
+```bash
+python3 -m venv myenv
+```
+
+3. Activate the python virtual environment. You should notice the courser change. 
+
+```bash
+ $ source myenv/bin/activate
+(myenv) $ 
+```
+
+4. Install the PyAVD python libraries. The example code will force a specific version instead of installing the latest.
+
+```bash
+pip install "pyavd[ansible]==5.4.0"
+ansible-galaxy collection install arista.avd:==5.4.0
+```
+
+## Install AVD Examples
+
+1. Run the Examples installation Ansible playbook.
+
+```bash
+ansible-playbook arista.avd.install_examples
+```
+
+The process will pull down all the examples from the repository. This guide will focus the Campus example.
+
+```bash
+(myenv) $ ansible-playbook arista.avd.install_examples
+
+PLAY [Install Examples] *****************************************************************************************************
+
+TASK [Copy all examples to /Path/to/folde/] *****************************************************************************************************
+changed: [localhost]
+
+PLAY RECAP ******************************************************************************************
+localhost                  : ok=1    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0  
+```
+
+2. You can list all the AVD Example folders
+
+```bash
+(myenv) $ ls -l
+total 4
+-rw-r--r-- 1 admin admin 445 Aug 10 11:36 ansible.cfg.old
+drwxr-xr-x 1 admin admin 384 Aug 10 11:41 campus-fabric
+drwxr-xr-x 1 admin admin  96 Aug 10 11:41 common
+drwxr-xr-x 1 admin admin 448 Aug 10 11:41 cv-pathfinder
+drwxr-xr-x 1 admin admin 384 Aug 10 11:41 dual-dc-l3ls
+drwxr-xr-x 1 admin admin 384 Aug 10 11:41 isis-ldp-ipvpn
+drwxr-xr-x 1 admin admin 384 Aug 10 11:41 l2ls-fabric
+drwxr-xr-x 1 admin admin 224 Aug 10 11:16 myenv
+drwxr-xr-x 1 admin admin 448 Aug 10 11:41 single-dc-l3ls
+```
+
+3. Navigate to the "campus-fabric" folder
+
+```bash
+(myenv) $ cd campus-fabric/
+```
+
+4. Run the AVD build playbook. The "build.yml" playbook will render device configuration from the group and host varibles provided into AVD design templates.
+
+```bash
+(myenv) $ ansible-playbook -i inventory.yml build.yml 
+```
 
 ## Step 4: Import Arista cEOS-Lab Image Into Docker
 
