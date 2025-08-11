@@ -15,7 +15,6 @@
     - [Python Virtual Environment Setup](#python-virtual-environment-setup)
     - [AVD Install](#avd-install)
     - [Download AVD Examples](#download-avd-examples)
-    - [Run AVD Example Playbook](#run-avd-example-playbook)
   - [Step 3. AVD Campus Example Configuration Render](#step-3-avd-campus-example-configuration-render)
     - [Navigate to Campus Fabric Folder Location](#navigate-to-campus-fabric-folder-location)
     - [Run AVD Build Playbook](#run-avd-build-playbook)
@@ -151,9 +150,8 @@ Arista AVD comes packed with pre-configured example tologies that you can downlo
 
 [Arista AVD Examples Documentation](https://avd.arista.com/5.4/ansible_collections/arista/avd/examples/single-dc-l3ls/index.html)
 
-### Run AVD Example Playbook
 
-1. Run the Examples installation Ansible playbook.
+1. Run the Examples installation Ansible playbook to download the example packes.
 
 ```bash
 ansible-playbook arista.avd.install_examples
