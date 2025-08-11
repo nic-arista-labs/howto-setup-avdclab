@@ -393,7 +393,7 @@ Deploy the containerlabs topology using the sample script provided.
 This will create a setp of conatiner switch running eos.
 
 ```bash
-(myenv) $containerlab -t avd-camp-exp-clab-topo.yml destroy
+(myenv) $containerlab -t avd-camp-exp-clab-topo.yml deploy
 ```
 
 Conatinerlab will start to deploy the switches in docker
